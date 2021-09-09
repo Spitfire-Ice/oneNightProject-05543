@@ -7,7 +7,7 @@ canvas.height = 600;
 // global variables
 const cellSize = 100;
 const cellGap = 3;
-let numberOfResources = 300;
+let numberOfResources = 400;
 let enemiesInterval = 600;
 let frame = 0;
 let gameOver = false;
@@ -292,6 +292,14 @@ function handleGameStatus() {
     ctx.fillStyle = 'black';
     ctx.font = '90px Orbitron';
     ctx.fillText('GAME OVER', 135, 330);
+  }
+  if (score >= winningScore && enemies.length === 0) {
+    ctx.fillStyle = 'black';
+    ctx.font = '60px Orbitron';
+    ctx.fillText('LEVEL COMPLET', 130, 300);
+    ctx.font = '30px Orbitron';
+    ctx.fillText('You win with ' + score + ' points!', 134, 340);
+
   }
 }
 
