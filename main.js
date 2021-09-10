@@ -328,3 +328,7 @@ function collision(first, second) {
     return true;
   }
 }
+
+window.addEventListener('resize', function () {
+  canvasPosition = canvas.getBoundingClientRect();
+});
