@@ -124,6 +124,10 @@ function handleProjectiles() {
 }
 
 // defenders
+const defender1 = new Image();
+defender1.src = 'defender1.png';
+
+
 class Defender {
   constructor(x, y) {
     this.x = x;
@@ -131,9 +135,16 @@ class Defender {
     this.width = cellSize - cellGap * 2;
     this.height = cellSize - cellGap * 2;
     this.shooting = false;
+    this.shootNow = false;
     this.health = 100;
     this.projectiles = [];
     this.timer = 0;
+    this.frameX = 0;
+    this.frameY = 0;
+    this.spriteWidth = 194;
+    this.spriteHeight = 194;
+    this.minFrame = 0;
+    this.maxFrame = 16;
   }
 
   draw() {
@@ -142,18 +153,30 @@ class Defender {
     ctx.fillStyle = 'gold';
     ctx.font = '20px Orbitron';
     ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+    // ctx.drawImage(defender1, sx, sy, sw, sh, dx, dy, dw, dh); // for example
+    ctx.drawImage(defender1, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight,
+      this.x, this.y, this.width, this.height);
+
   }
 
   update() {
-    if (this.shooting) {
-      this.timer++;
-      if (this.timer % 100 === 0) {
-        projectiles.push(new Projectile(this.x + 70, this.y + 50))
-      }
-    } else {
-      this.timer = 0;
+    if (frame % 10 === 0) { // shooting speed
+      if (this.frameX < this.maxFrame) this.frameX++;
+      else this.frameX = this.minFrame;
+      if (this.frameX === 15) this.shootNow = true;
     }
+    if (this.shooting) {
+      this.minFrame = 0;
+      this.maxFrame = 15;
 
+    } else {
+      this.minFrame = 17;
+      this.maxFrame = 23;
+    }
+    if (this.shooting && this.shootNow) {
+      projectiles.push(new Projectile(this.x + 70, this.y + 35));
+      this.shootNow = false
+    }
   }
 }
 
@@ -266,8 +289,8 @@ class Enemy {
     ctx.font = '20px Orbitron';
     ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
     // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh); just for example
-    ctx.drawImage(this.enemyTypes, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight ,
-                  this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.enemyTypes, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight,
+      this.x, this.y, this.width, this.height);
 
   }
 }
