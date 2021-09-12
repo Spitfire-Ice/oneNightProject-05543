@@ -7,12 +7,12 @@ canvas.height = 600;
 // global variables
 const cellSize = 100;
 const cellGap = 3;
-let numberOfResources = 400;
+let numberOfResources = 300; // Resources at start
 let enemiesInterval = 600;
 let frame = 0;
 let gameOver = false;
 let score = 0;
-const winningScore = 50;
+const winningScore = 50; // Score to win(+100?)
 
 const gameGrid = [];
 const defenders = [];
@@ -224,6 +224,14 @@ function handleFloatingMessage() {
 }
 
 // enemies
+const enemyTypes = [];
+const enemy1 = new Image();
+enemy1.src = 'enemy1.png';
+enemyTypes.push(enemy1);
+const enemy2 = new Image();
+enemy2.src = 'enemy2.png';
+enemyTypes.push(enemy2);
+
 class Enemy {
   constructor(verticalPosition) {
     this.x = canvas.width;
@@ -234,18 +242,33 @@ class Enemy {
     this.movement = this.speed;
     this.health = 100;
     this.maxHealth = this.health;
+    this.enemyTypes = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+    this.frameX = 0;
+    this.frameY = 0; // If sprite row more than one!
+    this.minFrame = 0;
+    this.maxFrame = 4;
+    this.spriteWidth = 256;
+    this.spriteHeight = 256;
   }
 
   update() {
     this.x -= this.movement;
+    if (frame % 10 === 0) {
+      if (this.frameX < this.maxFrame) this.frameX++;
+      else this.frameX = this.minFrame;
+    }
   }
 
   draw() {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.fillStyle = 'red'; // for dev Enemy cube
+    // ctx.fillRect(this.x, this.y, this.width, this.height); // for dev Enemy cube
     ctx.fillStyle = 'black';
     ctx.font = '20px Orbitron';
     ctx.fillText(Math.floor(this.health), this.x + 15, this.y + 30);
+    // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh); just for example
+    ctx.drawImage(this.enemyTypes, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight ,
+                  this.x, this.y, this.width, this.height);
+
   }
 }
 
